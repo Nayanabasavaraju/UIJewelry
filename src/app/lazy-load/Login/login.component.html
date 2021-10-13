@@ -1,0 +1,75 @@
+<div class="container-fluid login-container" style="overflow:hidden;">
+    <div class="row" style="overflow:hidden">
+      <form [formGroup]="loginForm"  style="width: 100%;" (ngSubmit)="login(loginForm.value)" >
+      <div class="col-lg-12 " style="padding:0">
+  
+        <div class="container">
+          <div class="row">
+  
+            <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
+              <div class="card  my-5" style="background-color:#ffffff !important ;">
+                <div class="card-body p-4">
+                  <!-- <img src="assets/images/vitalaxis.jpg" alt="user_avator"  style="width:25%"> -->
+                  <h1 class="my-3" style="text-align: center;"><strong >Jewellery</strong> </h1>
+                  <div *ngIf="!bLogin" class="box-color danger  login_error">
+                  <a class="pull-right text-muted text-md m-r-sm" (click)="bLogin=true;loginForm.reset()">×</a>
+                  <div class="box-body"
+                    style="text-align:left;padding-left: 5px;padding-bottom: 5px;padding-top: 5px;">
+                    <strong *ngIf="bRole">User account not mapped. Please contact administrator</strong>
+                    <strong *ngIf="!bRole">User name or Password you have entered is invalid, please try again.</strong>
+  
+  
+                  </div>
+                </div>
+                  <mat-form-field appearance="outline" style="width: 100%;">
+                    <mat-label>User Name</mat-label>
+                    <input matInput type="text"   style="font-size: 17px;" autofocus formControlName="username" #idusername>
+                    <mat-icon matPrefix>person</mat-icon>
+                  </mat-form-field>
+                  <mat-form-field appearance="outline"  style="width: 100%;">
+                    <mat-label>Password</mat-label>
+                    <input matInput  type="password" style="font-size: 17px;" formControlName="password">
+                    <mat-icon matPrefix>lock</mat-icon>
+                  </mat-form-field>
+                  <div class="row text-left ">
+                    <div class="col-sm-12">
+                      <mat-checkbox formControlName="remember">Remember Me</mat-checkbox>
+                    <button mat-raised-button color="primary" class="pull-right" style="width: 33%;"[disabled]="loginForm.invalid">
+                      Login
+                      <span class="pl-2">
+                        <i class="fa fa-refresh fa-spin m-r-sm" [hidden]="!isLoading"></i>
+                      <i class="fa fa-arrow-circle-right m-r-sm" [hidden]="isLoading"></i>
+                      </span>
+  
+                    </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+  
+          </div>
+        </div>
+  
+        <!-- <div style="position: fixed;bottom:0px">
+          <img src="/assets/images/vo_bckgrd.jpg" width="65%" >
+  
+        </div> -->
+        <div class="app-footer" style="position: fixed">
+          <div class="p-2 text-xs">
+            <!--<div class="nav"  style="float:left">
+              <img src="/assets/images/vlgx-96px.png" height="20px">
+            </div>-->
+            <!-- <div class="text-muted py-1 text-center">
+              &copy; Copyright
+              <span style="color: #d9534f!important;"> <strong>Vitalaxis</strong></span>
+  
+  
+            </div> -->
+  
+          </div>
+        </div>
+      </div>
+    </form>
+    </div>
+  

@@ -1,0 +1,154 @@
+<div class="row">
+  <div class="col-sm-12">
+    <button type="button" (click)="AddJewellary(false)" class="btn btn-info pull-right" data-bs-toggle="modal"
+      data-bs-target="#staticBackdrop" style="margin-top:1rem;margin-right: 1rem;">Add</button>
+  </div>
+</div>
+<div class="row">
+  <div class="col-sm-3" *ngFor="let jelry of jewelarArry">
+    <div class="card" style="width: 18rem;margin: 20px;">
+      <img src="data:{{jelry.imagetype}};base64,{{jelry.base64Image}}" class="card-img-top" alt="..."
+        style="width: 286px;height: 215px;">
+      <div class="card-body">
+        <h5 class="card-title">
+          <div class="row">
+            <div class="col-sm-6" style="font-size: 20px;">
+              {{jelry.categoryName}}
+            </div>
+            <div class="col-sm-6">
+              <a (click)="editFunction(true,jelry)" class="pull-right">
+                <i class="fa fa-edit fa-2x"></i>
+              </a>
+            </div>
+          </div>
+        </h5>
+        <div class="row card-text">
+          <div class="col-sm-6" style="padding-right: 0;">
+            <span>
+              <b>Original Price:</b> {{jelry.originalPrice}}
+            </span>
+          </div>
+          <div class="col-sm-6">
+            <b>Qty:</b> {{jelry.quantity}}
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-6" style="padding-right: 0;">
+            <span>
+              <b>Selling Price: </b>{{jelry.sellingPrice}}
+            </span>
+          </div>
+          <div class="col-sm-6">
+            <b>Sold price: </b>{{jelry.soldPrice}}
+          </div>
+        </div>
+        <!-- <a href="#" class="btn btn-primary">Go somewhere</a> -->
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+  aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <form [formGroup]="Addjewelrygroup">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+            (click)="Addjewelrygroup.reset();ModalClose()"></button>
+        </div>
+        <div class="modal-body">
+          <div class="row px-3">
+            <div class="col-sm-12">
+              <div class="row">
+                <div class="col-sm-4">
+                  <label class="btn btn-default p-0">
+                    <input type="file" accept="image/*" multiple (change)="selectFiles($event)" />
+                  </label>
+                </div>
+                <div class="col-sm-8">
+                  <!-- Image Preview -->
+                  <div class="imagePreview" *ngIf="imageURL && imageURL !== ''">
+                    <img [src]="imageURL" height="200">
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-6">
+                  <mat-form-field class="input_style" style="width: 100%;">
+                    <mat-label>Type</mat-label>
+                    <mat-select formControlName="jtype" required>
+                      <mat-option>None</mat-option>
+                      <mat-option *ngFor="let type of jtypeArry" [value]="type['id']">
+                        {{type['name']}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div class="col-sm-6">
+                  <mat-form-field class="input_style" style="width: 100%;">
+                    <mat-label>Category</mat-label>
+                    <mat-select formControlName="jcategory" required>
+                      <mat-option>None</mat-option>
+                      <mat-option *ngFor="let cat of jcategoryArry" [value]="cat['id']">
+                        {{cat['categoryName']}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-6">
+                  <mat-form-field style="width: 100%;">
+                    <mat-label>Original Price</mat-label>
+                    <input matInput type="number" style="font-size: 17px;" required formControlName="originalprice">
+                  </mat-form-field>
+                </div>
+                <div class="col-sm-6">
+                  <mat-form-field style="width: 100%;">
+                    <mat-label>Quanity</mat-label>
+                    <input matInput type="number" required style="font-size: 17px;" formControlName="quantity">
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-6">
+                  <mat-form-field style="width: 100%;">
+                    <mat-label>Selling Price</mat-label>
+                    <input matInput type="number" style="font-size: 17px;" required formControlName="sellingprice">
+                  </mat-form-field>
+                </div>
+                <div class="col-sm-6" *ngIf="isedit">
+                  <mat-form-field style="width: 100%;">
+                    <mat-label>Sold Price</mat-label>
+                    <input matInput type="number" style="font-size: 17px;" formControlName="soldprice">
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-3" *ngIf="isedit">
+                  <mat-form-field style="width: 100%;">
+                    <mat-label>Remaining Quantity</mat-label>
+                    <input matInput type="number" readonly style="font-size: 17px;" formControlName="remainingQty">
+                  </mat-form-field>
+                </div>
+                <div class="col-sm-2" style="margin-top: 1.2rem;">
+                  <mat-checkbox [checked]="true" formControlName="isActive">Available</mat-checkbox>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+            (click)="Addjewelrygroup.reset();ModalClose()">Close</button>
+          <button type="button" class="btn btn-primary" [disabled]="Addjewelrygroup.invalid || disableSavebtn"
+            (click)="saveJewelryDetails(Addjewelrygroup.value)">Submit</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

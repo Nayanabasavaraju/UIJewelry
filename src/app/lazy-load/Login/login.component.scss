@@ -1,0 +1,17 @@
+
+.login_error {
+    position: absolute !important;
+      top: 11px;
+      width: 94%;
+      min-height: 50px;
+      left: 14px;
+      border-radius: 5px;
+      padding-left: 15px;
+    animation: mymove 1s;
+  }
+  
+  @keyframes mymove {
+    from {top: -3px;}
+    to {top: 11px;}
+  }
+  
