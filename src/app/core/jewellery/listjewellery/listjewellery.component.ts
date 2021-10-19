@@ -4,7 +4,7 @@ import { dataService } from 'src/app/base/services/jewelry.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { NgForm, FormGroup, FormArray, FormControl, FormBuilder, Validators, AbstractControl, ValidatorFn, FormsModule, ReactiveFormsModule, RequiredValidator } from '@angular/forms';
 
-declare var $ : any;
+declare var $: any;
 
 @Component({
   selector: 'list-jewellery',
@@ -13,7 +13,7 @@ declare var $ : any;
 })
 export class ListJewelleryComponent implements OnInit {
 
-  constructor(public router: Router, private service: dataService, private _fb: FormBuilder,private _snackBar: MatSnackBar) { }
+  constructor(public router: Router, private service: dataService, private _fb: FormBuilder, private _snackBar: MatSnackBar) { }
   jtypeArry: any = [];
   jcategoryArry: any = [];
   imageURL: string = '';
@@ -21,8 +21,9 @@ export class ListJewelleryComponent implements OnInit {
   imageBase64: string = '';
   jewelarArry: any = [];
   isedit: boolean = false;
-  disableSavebtn : boolean = true;
+  disableSavebtn: boolean = true;
   Addjewelrygroup = this._fb.group({
+    id: [null],
     jtype: ['', Validators.required],
     jcategory: ['', [Validators.required]],
     originalprice: ['', Validators.required],
@@ -30,10 +31,11 @@ export class ListJewelleryComponent implements OnInit {
     sellingprice: ['', Validators.required],
     soldprice: [''],
     remainingQty: [''],
-    solddate: [new Date()],
+    solddate: [null],
     isActive: [true],
     base64image: [null],
     imageType: [null],
+    selectedfile: [null]
   });
   ngOnInit() {
     this.service.getjewelryType().subscribe((res: any) => {
@@ -85,29 +87,29 @@ export class ListJewelleryComponent implements OnInit {
     reader.readAsDataURL(file)
   }
 
-  ReSizeImg(width:any,height:any,img:any,imagetype:any ){
+  ReSizeImg(width: any, height: any, img: any, imagetype: any) {
     let canvas: HTMLCanvasElement = document.createElement("canvas");
-        let ctx: any = canvas.getContext("2d");
-        ctx.drawImage(img, 0, 0);
-        let MAX_WIDTH: any = 1152;
-        let MAX_HEIGHT: any = 864;
-        if (width > height) {
-            if (width > MAX_WIDTH) {
-                height *= MAX_WIDTH / width;
-                width = MAX_WIDTH;
-            }
-        } else {
-            if (height > MAX_HEIGHT) {
-                width *= MAX_HEIGHT / height;
-                height = MAX_HEIGHT;
-            }
-        }
-        canvas.width = width;
-        canvas.height = height;
-        let ctx1 = canvas.getContext("2d");
-        if(ctx1 != null)
-        ctx1.drawImage(img, 0, 0, width, height);
-        this.imageURL = canvas.toDataURL("image/png");
+    let ctx: any = canvas.getContext("2d");
+    ctx.drawImage(img, 0, 0);
+    let MAX_WIDTH: any = 1152;
+    let MAX_HEIGHT: any = 864;
+    if (width > height) {
+      if (width > MAX_WIDTH) {
+        height *= MAX_WIDTH / width;
+        width = MAX_WIDTH;
+      }
+    } else {
+      if (height > MAX_HEIGHT) {
+        width *= MAX_HEIGHT / height;
+        height = MAX_HEIGHT;
+      }
+    }
+    canvas.width = width;
+    canvas.height = height;
+    let ctx1 = canvas.getContext("2d");
+    if (ctx1 != null)
+      ctx1.drawImage(img, 0, 0, width, height);
+    this.imageURL = canvas.toDataURL("image/png");
   }
   ReadAsBase64(file: any): Promise<any> {
     const reader = new FileReader();
@@ -129,23 +131,24 @@ export class ListJewelleryComponent implements OnInit {
     return fileValue;
   }
 
-  editFunction(edit: any,val: any) {
+  editFunction(edit: any, val: any) {
     this.isedit = edit;
     this.disableSavebtn = false;
     this.Addjewelrygroup.patchValue({
-      originalprice : val.originalPrice,
-      quantity :val.quantity,
+      id: val.id,
+      originalprice: val.originalPrice,
+      quantity: val.quantity,
       sellingprice: val.sellingPrice,
       jtype: val.typeID,
       jcategory: val.categoryID,
       soldprice: val.soldPrice,
       remainingQty: val.remainingqty,
       isActive: val.isActive,
-      solddate: (val.solddate == null) ? new Date() : val.solddate
+      solddate: val.solddate //(val.solddate == null) ? new Date() : val.solddate
     });
     this.imageURL = "data:" + val.imagetype + ";base64," + val.base64Image;
     $('#staticBackdrop').modal('show');
-    console.log("edit function",val)
+    console.log("edit function", val)
   }
 
   AddJewellary(val: any) {
@@ -153,16 +156,16 @@ export class ListJewelleryComponent implements OnInit {
     this.isedit = val;
     //this.router.navigate(['/jewelry/addjewellery'])
   }
-  ModalClose(){
+  ModalClose() {
     this.imageURL = '';
   }
   saveJewelryDetails(value: any) {
     this.disableSavebtn = true;
     console.log("save value", value);
     //$('#staticBackdrop').modal('hide');
-    
+
     var savejson = {
-      "ID" : 0,
+      "ID": (value.id == null) ? 0 : value.id,
       "TypeID": value.jtype,
       "OriginalPrice": value.originalprice,
       "SellingPrice": value.sellingprice,
@@ -173,15 +176,26 @@ export class ListJewelleryComponent implements OnInit {
       "Base64Image": value.base64image,
       "Imagetype": value.imageType,
       "isActive": value.isActive,
-      "SoldDate":value.solddate,
-      "CreatedBy": localStorage.getItem("userid")
+      "SoldDate": value.solddate,
+      "CreatedBy": localStorage.getItem("userid"),
+      "ModifiedBy": (value.id == null) ? null : localStorage.getItem("userid")
     }
     this.service.PostJewellary(savejson).subscribe(res => {
-      console.log("save",res);
-      if(res.success)
+      console.log("save", res);
+      if (res.success) {
         this._snackBar.open(res.message,"Success");
-      else
-        this._snackBar.open("Unable to Add","Failed");
+        //this.router.navigate(['/jewelry/listjewellery']);
+        this.router.navigate(['/jewelry/listjewellery'])
+          .then(() => {
+            window.location.reload();
+          });
+        // this.router.routeReuseStrategy.shouldReuseRoute = function () {
+        //   return true;
+        // };
+      }
+      else {
+        this._snackBar.open("Unable to Add", "Failed");
+      }
       this.Addjewelrygroup.reset();
       $('#staticBackdrop').modal('hide');
     });

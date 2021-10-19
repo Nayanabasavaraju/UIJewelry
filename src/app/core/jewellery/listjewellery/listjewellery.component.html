@@ -66,7 +66,7 @@
               <div class="row">
                 <div class="col-sm-4">
                   <label class="btn btn-default p-0">
-                    <input type="file" accept="image/*" multiple (change)="selectFiles($event)" />
+                    <input type="file" accept="image/*" multiple (change)="selectFiles($event)" formControlName="selectedfile" />
                   </label>
                 </div>
                 <div class="col-sm-8">
@@ -124,7 +124,7 @@
                 <div class="col-sm-6" *ngIf="isedit">
                   <mat-form-field style="width: 100%;">
                     <mat-label>Sold Price</mat-label>
-                    <input matInput type="number" style="font-size: 17px;" formControlName="soldprice">
+                    <input matInput type="number" style="font-size: 17px;" formControlName="soldprice" >
                   </mat-form-field>
                 </div>
               </div>
@@ -132,7 +132,7 @@
                 <div class="col-sm-3" *ngIf="isedit">
                   <mat-form-field style="width: 100%;">
                     <mat-label>Remaining Quantity</mat-label>
-                    <input matInput type="number" readonly style="font-size: 17px;" formControlName="remainingQty">
+                    <input matInput type="number"  style="font-size: 17px;" formControlName="remainingQty">
                   </mat-form-field>
                 </div>
                 <div class="col-sm-3" *ngIf="isedit">

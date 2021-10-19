@@ -88,6 +88,8 @@ import {MatNativeDateModule,MAT_DATE_LOCALE } from '@angular/material/core';
     PortalModule,
     ScrollingModule
   ],
-  providers:[ {provide: MAT_DATE_LOCALE, useValue: 'en-GB'}]
+  providers:[ {provide: MAT_DATE_LOCALE, useValue: 'en-GB'},
+  //{provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: {duration: 2500}}
+]
 })
 export class AppMaterialModule {}
