@@ -135,6 +135,14 @@
                     <input matInput type="number" readonly style="font-size: 17px;" formControlName="remainingQty">
                   </mat-form-field>
                 </div>
+                <div class="col-sm-3" *ngIf="isedit">
+                  <mat-form-field style="width: 100%;">
+                    <mat-label>Choose a date</mat-label>
+                    <input matInput [matDatepicker]="picker" formControlName="solddate">
+                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker  #picker></mat-datepicker>
+                  </mat-form-field>
+                </div>
                 <div class="col-sm-2" style="margin-top: 1.2rem;">
                   <mat-checkbox [checked]="true" formControlName="isActive">Available</mat-checkbox>
                 </div>

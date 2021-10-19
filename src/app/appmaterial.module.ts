@@ -41,7 +41,7 @@ import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatTreeModule} from '@angular/material/tree';
 import {OverlayModule} from '@angular/cdk/overlay';
-
+import {MatNativeDateModule,MAT_DATE_LOCALE } from '@angular/material/core';
 @NgModule({
   exports: [
     A11yModule,
@@ -59,6 +59,7 @@ import {OverlayModule} from '@angular/cdk/overlay';
     MatChipsModule,
     MatStepperModule,
     MatDatepickerModule,
+    MatNativeDateModule,
     MatDialogModule,
     MatDividerModule,
     MatExpansionModule,
@@ -86,6 +87,7 @@ import {OverlayModule} from '@angular/cdk/overlay';
     OverlayModule,
     PortalModule,
     ScrollingModule
-  ]
+  ],
+  providers:[ {provide: MAT_DATE_LOCALE, useValue: 'en-GB'}]
 })
 export class AppMaterialModule {}

@@ -30,6 +30,7 @@ export class ListJewelleryComponent implements OnInit {
     sellingprice: ['', Validators.required],
     soldprice: [''],
     remainingQty: [''],
+    solddate: [new Date()],
     isActive: [true],
     base64image: [null],
     imageType: [null],
@@ -139,7 +140,8 @@ export class ListJewelleryComponent implements OnInit {
       jcategory: val.categoryID,
       soldprice: val.soldPrice,
       remainingQty: val.remainingqty,
-      isActive: val.isActive
+      isActive: val.isActive,
+      solddate: (val.solddate == null) ? new Date() : val.solddate
     });
     this.imageURL = "data:" + val.imagetype + ";base64," + val.base64Image;
     $('#staticBackdrop').modal('show');
@@ -171,6 +173,7 @@ export class ListJewelleryComponent implements OnInit {
       "Base64Image": value.base64image,
       "Imagetype": value.imageType,
       "isActive": value.isActive,
+      "SoldDate":value.solddate,
       "CreatedBy": localStorage.getItem("userid")
     }
     this.service.PostJewellary(savejson).subscribe(res => {
